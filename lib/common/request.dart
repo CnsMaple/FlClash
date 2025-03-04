@@ -84,6 +84,12 @@ class Request {
             .get<Map<String, dynamic>>(
               source.key,
               cancelToken: cancelToken,
+              options: Options(
+                headers: {
+                  "User-Agent": browserUa,
+                },
+                responseType: ResponseType.json,
+              ),
             )
             .timeout(httpTimeoutDuration);
         if (response.statusCode != 200 || response.data == null) {
