@@ -113,10 +113,11 @@ class GlobalState {
     stopUpdateTasks();
   }
 
-  Future<bool?> showMessage<bool>({
+  Future<bool?> showMessage({
     required String title,
     required InlineSpan message,
     String? confirmText,
+    bool cancelable = true,
   }) async {
     return await showCommonDialog<bool>(
       child: Builder(
@@ -139,12 +140,13 @@ class GlobalState {
               ),
             ),
             actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text(appLocalizations.cancel),
-              ),
+              if (cancelable)
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text(appLocalizations.cancel),
+                ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);

@@ -458,7 +458,7 @@ class AppController {
       title: appLocalizations.tip,
       message: TextSpan(text: appLocalizations.cacheCorrupt),
     );
-    if (res) {
+    if (res == true) {
       final file = File(await appPath.sharedPreferencesPath);
       final isExists = await file.exists();
       if (isExists) {

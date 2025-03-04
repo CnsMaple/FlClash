@@ -13,11 +13,10 @@ class Request {
   String? userAgent;
 
   Request() {
-    _dio = Dio();
-    _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          return handler.next(options); // 继续请求
+    _dio = Dio(
+      BaseOptions(
+        headers: {
+          "User-Agent": browserUa,
         },
       ),
     );
@@ -80,18 +79,13 @@ class Request {
   Future<IpInfo?> checkIp({CancelToken? cancelToken}) async {
     for (final source in _ipInfoSources.entries) {
       try {
-        final response = await _dio
-            .get<Map<String, dynamic>>(
-              source.key,
-              cancelToken: cancelToken,
-              options: Options(
-                headers: {
-                  "User-Agent": browserUa,
-                },
-                responseType: ResponseType.json,
-              ),
-            )
-            .timeout(httpTimeoutDuration);
+        final response = await _dio.get<Map<String, dynamic>>(
+          source.key,
+          cancelToken: cancelToken,
+          options: Options(
+            responseType: ResponseType.json,
+          ),
+        );
         if (response.statusCode != 200 || response.data == null) {
           continue;
         }
@@ -115,6 +109,9 @@ class Request {
           .get(
             "http://$localhost:$helperPort/ping",
             options: Options(
+              headers: {
+                "User-Agent": browserUa,
+              },
               responseType: ResponseType.plain,
             ),
           )
