@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/models/common.dart';
+import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -47,11 +48,6 @@ class _MemoryInfoState extends State<MemoryInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final darkenLighter = context.colorScheme.secondaryContainer
-        .blendDarken(context, factor: 0.1)
-        .toLighter;
-    final darken = context.colorScheme.secondaryContainer
-        .blendDarken(context, factor: 0.1);
     return SizedBox(
       height: getWidgetHeight(2),
       child: CommonCard(
@@ -97,14 +93,15 @@ class _MemoryInfoState extends State<MemoryInfo> {
                     child: WaveView(
                       waveAmplitude: 12.0,
                       waveFrequency: 0.35,
-                      waveColor: darkenLighter,
+                      waveColor:
+                          globalState.theme.darkenSecondaryContainerLighter,
                     ),
                   ),
                   Positioned.fill(
                     child: WaveView(
                       waveAmplitude: 12.0,
                       waveFrequency: 0.9,
-                      waveColor: darken,
+                      waveColor: globalState.theme.darkenSecondaryContainer,
                     ),
                   ),
                 ],

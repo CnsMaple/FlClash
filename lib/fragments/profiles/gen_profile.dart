@@ -1,8 +1,7 @@
 import 'package:fl_clash/clash/core.dart';
+import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/models/models.dart';
-import 'package:fl_clash/state.dart';
-import 'package:fl_clash/widgets/card.dart';
-import 'package:fl_clash/widgets/scaffold.dart';
+import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class GenProfile extends StatefulWidget {
@@ -27,12 +26,8 @@ class _GenProfileState extends State<GenProfile> {
   }
 
   _initCurrentClashConfig() async {
-    final currentProfileId = globalState.config.currentProfileId;
-    if (currentProfileId == null) {
-      return;
-    }
     _currentClashConfigNotifier.value =
-        await clashCore.getProfile(currentProfileId);
+        await clashCore.getProfile(widget.profileId);
   }
 
   @override
@@ -46,38 +41,93 @@ class _GenProfileState extends State<GenProfile> {
               child: CircularProgressIndicator(),
             );
           }
-          return Padding(
-            padding: EdgeInsets.all(16),
-            child: CustomScrollView(
-              slivers: [
-                SliverGrid.builder(
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    '代理组',
+                    style: context.textTheme.titleMedium,
+                  ),
+                ),
+              ),
+              SliverPadding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
+                sliver: SliverGrid.builder(
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 100,
-                    mainAxisExtent: 50,
+                    maxCrossAxisExtent: 120,
+                    mainAxisExtent: 54,
                     mainAxisSpacing: 8,
                     crossAxisSpacing: 8,
                   ),
                   itemCount: clashConfig.proxyGroups.length,
                   itemBuilder: (BuildContext context, int index) {
+                    final group = clashConfig.proxyGroups[index];
                     return CommonCard(
+                      borderSide: WidgetStatePropertyAll(BorderSide.none),
+                      backgroundColor: WidgetStatePropertyAll(
+                        context.colorScheme.surfaceContainer,
+                      ),
                       onPressed: () {},
-                      child: Text(
-                        clashConfig.proxyGroups[index].name,
+                      child: Container(
+                        constraints: BoxConstraints.expand(),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              group.name,
+                              maxLines: 1,
+                              style: context.textTheme.bodyMedium?.copyWith(
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            Text(
+                              group.type.name,
+                              style: context.textTheme.bodySmall?.toLight,
+                            )
+                          ],
+                        ),
                       ),
                     );
                   },
                 ),
-                SliverList.builder(
-                  itemBuilder: (BuildContext context, int index) {
-                    final rule = clashConfig.rule[index];
-                    return Text(
-                      rule,
-                    );
-                  },
-                  itemCount: clashConfig.rule.length,
-                )
-              ],
-            ),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    '规则',
+                    style: context.textTheme.titleMedium,
+                  ),
+                ),
+              ),
+              SliverList.builder(
+                itemBuilder: (BuildContext context, int index) {
+                  final rule = clashConfig.rule[index];
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      color: (index % 2 == 0)
+                          ? context.colorScheme.surfaceContainer
+                          : context.colorScheme.surfaceContainer,
+                      child: Text(rule),
+                    ),
+                  );
+                },
+                itemCount: clashConfig.rule.length,
+              ),
+            ],
           );
         },
       ),

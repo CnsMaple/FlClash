@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:animations/animations.dart';
 import 'package:fl_clash/clash/clash.dart';
+import 'package:fl_clash/common/theme.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/plugins/service.dart';
@@ -27,6 +28,7 @@ class GlobalState {
   Function? updateCurrentDelayDebounce;
   PageController? pageController;
   late Measure measure;
+  late CommonTheme theme;
   DateTime? startTime;
   UpdateTasks tasks = [];
   final safeMessageOffsetNotifier = ValueNotifier(Offset.zero);

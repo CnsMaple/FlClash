@@ -331,13 +331,13 @@ class ProfileItem extends StatelessWidget {
                           //   },
                           // ),
                         ],
-                        // ActionItemData(
-                        //   icon: Icons.extension_outlined,
-                        //   label: "自定义",
-                        //   onPressed: () {
-                        //     _handlePushGenProfilePage(context, profile.id);
-                        //   },
-                        // ),
+                        ActionItemData(
+                          icon: Icons.extension_outlined,
+                          label: "自定义",
+                          onPressed: () {
+                            _handlePushGenProfilePage(context, profile.id);
+                          },
+                        ),
                         ActionItemData(
                           icon: Icons.file_copy_outlined,
                           label: appLocalizations.exportFile,
