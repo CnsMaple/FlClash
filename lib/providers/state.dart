@@ -417,6 +417,9 @@ ProxyCardState _getProxyCardState(
   final group = groups[index];
   final currentSelectedName = group
       .getCurrentSelectedName(selectedMap[proxyDelayState.proxyName] ?? '');
+  if (currentSelectedName.isEmpty) {
+    return proxyDelayState;
+  }
   return _getProxyCardState(
     groups,
     selectedMap,
