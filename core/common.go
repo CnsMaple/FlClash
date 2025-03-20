@@ -28,8 +28,12 @@ import (
 	"sync"
 )
 
-func splitByComma(s string) interface{} {
-	parts := strings.Split(s, ",")
+func splitByMultipleSeparators(s string) interface{} {
+	isSeparator := func(r rune) bool {
+		return r == ',' || r == ' ' || r == ';'
+	}
+
+	parts := strings.FieldsFunc(s, isSeparator)
 	if len(parts) > 1 {
 		return parts
 	}
@@ -171,7 +175,7 @@ func decorationConfig(profileId string, cfg config.RawConfig) *config.RawConfig 
 func genHosts(hosts, patchHosts map[string]any) {
 	for k, v := range patchHosts {
 		if str, ok := v.(string); ok {
-			hosts[k] = splitByComma(str)
+			hosts[k] = splitByMultipleSeparators(str)
 		}
 	}
 }
@@ -179,7 +183,7 @@ func genHosts(hosts, patchHosts map[string]any) {
 func modPatchDns(dns *config.RawDNS) {
 	for pair := dns.NameServerPolicy.Oldest(); pair != nil; pair = pair.Next() {
 		if str, ok := pair.Value.(string); ok {
-			dns.NameServerPolicy.Set(pair.Key, splitByComma(str))
+			dns.NameServerPolicy.Set(pair.Key, splitByMultipleSeparators(str))
 		}
 	}
 }
