@@ -7,94 +7,113 @@ import 'package:flutter/material.dart';
 
 import 'side_sheet.dart';
 
-showExtendPage(
-  BuildContext context, {
-  required Widget body,
-  required String title,
-  double? extendPageWidth,
-  bool isScaffold = false,
-  bool isBlur = true,
-  Widget? action,
-}) {
-  final NavigatorState navigator = Navigator.of(context);
-  final globalKey = GlobalKey();
-  final uniqueBody = Container(
-    key: globalKey,
-    child: body,
-  );
-  final isMobile = globalState.appState.viewMode == ViewMode.mobile;
-  if (isMobile) {
-    BaseNavigator.push(
-      context,
-      CommonScaffold(
-        title: title,
-        body: uniqueBody,
-      ),
-    );
-    return;
-  }
-  final isNotSide = isMobile || isScaffold;
-  navigator.push(
-    ModalSideSheetRoute(
-      modalBarrierColor: Colors.black38,
-      builder: (context) {
-        final commonScaffold = CommonScaffold(
-          automaticallyImplyLeading: isNotSide,
-          actions: isNotSide
-              ? null
-              : [
-                  const SizedBox(
-                    height: kToolbarHeight,
-                    width: kToolbarHeight,
-                    child: CloseButton(),
-                  ),
-                ],
-          title: title,
-          body: uniqueBody,
-        );
-        return SizedBox(
-          width: isMobile ? context.viewWidth : extendPageWidth ?? 300,
-          child: commonScaffold,
-        );
-      },
-      constraints: const BoxConstraints(),
-      filter: isBlur ? filter : null,
-    ),
-  );
+@immutable
+class SheetProps {
+  final double maxWidth;
+  final double maxHeight;
+  final bool isScrollControlled;
+  final bool useSafeArea;
+  final bool blur;
+
+  const SheetProps({
+    this.maxWidth = 300,
+    this.maxHeight = 400,
+    this.useSafeArea = true,
+    this.isScrollControlled = false,
+    this.blur = true,
+  });
+}
+
+@immutable
+class ExtendProps {
+  final double maxWidth;
+  final bool useSafeArea;
+  final bool blur;
+
+  const ExtendProps({
+    this.maxWidth = 300,
+    this.useSafeArea = true,
+    this.blur = true,
+  });
 }
 
 Future<T?> showSheet<T>({
   required BuildContext context,
   required Widget body,
   required String title,
-  bool isScrollControlled = true,
-  double width = 320,
+  Widget? action,
+  SheetProps props = const SheetProps(),
 }) {
   final isMobile = globalState.appState.viewMode == ViewMode.mobile;
-  if (isMobile) {
-    return showModalBottomSheet<T>(
-      context: context,
-      isScrollControlled: isScrollControlled,
-      builder: (context) {
-        return SafeArea(
-          child: body,
-        );
-      },
-      showDragHandle: true,
-      useSafeArea: true,
-    );
-  } else {
-    return showModalSideSheet<T>(
-      useSafeArea: true,
-      isScrollControlled: isScrollControlled,
-      context: context,
-      constraints: BoxConstraints(
-        maxWidth: width,
+  return switch (isMobile) {
+    true => showModalBottomSheet<T>(
+        context: context,
+        isScrollControlled: props.isScrollControlled,
+        constraints: BoxConstraints(
+          maxHeight: props.maxHeight,
+        ),
+        builder: (_) {
+          return body;
+        },
+        showDragHandle: true,
+        useSafeArea: props.useSafeArea,
       ),
-      body: SafeArea(
-        child: body,
+    false => showModalSideSheet<T>(
+        useSafeArea: props.useSafeArea,
+        isScrollControlled: props.isScrollControlled,
+        context: context,
+        constraints: BoxConstraints(
+          maxWidth: props.maxWidth,
+        ),
+        filter: props.blur ? filter : null,
+        builder: (context) {
+          return CommonScaffold(
+            automaticallyImplyLeading: action == null ? false : true,
+            centerTitle: false,
+            body: body,
+            title: title,
+            actions: [action ?? CloseButton()],
+          );
+        },
       ),
-      title: title,
-    );
-  }
+  };
+}
+
+Future<T?> showExtend<T>(
+  BuildContext context, {
+  required Widget body,
+  ExtendProps props = const ExtendProps(),
+  required String title,
+  Widget? action,
+}) {
+  final isMobile = globalState.appState.viewMode == ViewMode.mobile;
+  return switch (isMobile) {
+    true => BaseNavigator.push(
+        context,
+        CommonScaffold(
+          body: body,
+          title: title,
+          actions: [
+            if (action != null) action,
+          ],
+        ),
+      ),
+    false => showModalSideSheet<T>(
+        useSafeArea: props.useSafeArea,
+        context: context,
+        constraints: BoxConstraints(
+          maxWidth: props.maxWidth,
+        ),
+        filter: props.blur ? filter : null,
+        builder: (context) {
+          return CommonScaffold(
+            automaticallyImplyLeading: action == null ? false : true,
+            centerTitle: false,
+            body: body,
+            title: title,
+            actions: [action ?? CloseButton()],
+          );
+        },
+      ),
+  };
 }

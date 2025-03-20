@@ -467,10 +467,6 @@ class _ListHeaderState extends State<ListHeader>
     return CommonCard(
       enterAnimated: widget.enterAnimated,
       key: widget.key,
-      borderSide: WidgetStatePropertyAll(BorderSide.none),
-      backgroundColor: WidgetStatePropertyAll(
-        context.colorScheme.surfaceContainer,
-      ),
       radius: 14,
       type: CommonCardType.filled,
       child: Padding(

@@ -24,7 +24,7 @@ class _ProfilesFragmentState extends State<ProfilesFragment> with PageMixin {
   Function? applyConfigDebounce;
 
   _handleShowAddExtendPage() {
-    showExtendPage(
+    showExtend(
       globalState.navigatorKey.currentState!.context,
       body: AddProfile(
         context: globalState.navigatorKey.currentState!.context,
@@ -205,7 +205,7 @@ class ProfileItem extends StatelessWidget {
   }
 
   _handleShowEditExtendPage(BuildContext context) {
-    showExtendPage(
+    showExtend(
       context,
       body: EditProfile(
         profile: profile,

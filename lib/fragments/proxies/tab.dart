@@ -67,8 +67,6 @@ class ProxiesTabFragmentState extends ConsumerState<ProxiesTabFragment>
   _showMoreMenu() {
     showSheet(
       context: context,
-      width: 380,
-      isScrollControlled: false,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Consumer(
@@ -101,6 +99,10 @@ class ProxiesTabFragmentState extends ConsumerState<ProxiesTabFragment>
             );
           },
         ),
+      ),
+      props: SheetProps(
+        maxWidth: 360,
+        isScrollControlled: false,
       ),
       title: appLocalizations.proxyGroup,
     );

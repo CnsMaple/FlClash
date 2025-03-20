@@ -22,9 +22,8 @@ class _ConfigFragmentState extends State<ConfigFragment> {
         leading: const Icon(Icons.vpn_key),
         delegate: OpenDelegate(
           title: appLocalizations.network,
-          isScaffold: true,
-          isBlur: false,
-          extendPageWidth: 360,
+          blur: false,
+          maxWidth: 360,
           widget: const NetworkListView(),
         ),
       ),
@@ -37,8 +36,8 @@ class _ConfigFragmentState extends State<ConfigFragment> {
           widget: generateListView(
             generalItems,
           ),
-          isBlur: false,
-          extendPageWidth: 360,
+          blur: false,
+          maxWidth: 360,
         ),
       ),
       ListItem.open(
@@ -48,9 +47,8 @@ class _ConfigFragmentState extends State<ConfigFragment> {
         delegate: const OpenDelegate(
           title: "DNS",
           widget: DnsListView(),
-          isScaffold: true,
-          isBlur: false,
-          extendPageWidth: 360,
+          blur: false,
+          maxWidth: 360,
         ),
       )
     ];

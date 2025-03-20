@@ -1,5 +1,6 @@
 import 'package:fl_clash/clash/core.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -67,10 +68,7 @@ class _GenProfileState extends State<GenProfile> {
                   itemBuilder: (BuildContext context, int index) {
                     final group = clashConfig.proxyGroups[index];
                     return CommonCard(
-                      borderSide: WidgetStatePropertyAll(BorderSide.none),
-                      backgroundColor: WidgetStatePropertyAll(
-                        context.colorScheme.surfaceContainer,
-                      ),
+                      type: CommonCardType.filled,
                       onPressed: () {},
                       child: Container(
                         constraints: BoxConstraints.expand(),

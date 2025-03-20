@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -562,8 +564,7 @@ class ModalSideSheetRoute<T> extends PopupRoute<T> {
 
 Future<T?> showModalSideSheet<T>({
   required BuildContext context,
-  required Widget body,
-  required String title,
+  required WidgetBuilder builder,
   Color? backgroundColor,
   String? barrierLabel,
   double? elevation,
@@ -580,6 +581,7 @@ Future<T?> showModalSideSheet<T>({
   RouteSettings? routeSettings,
   AnimationController? transitionAnimationController,
   Offset? anchorPoint,
+  ImageFilter? filter,
 }) {
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
@@ -588,30 +590,8 @@ Future<T?> showModalSideSheet<T>({
       Navigator.of(context, rootNavigator: useRootNavigator);
   final MaterialLocalizations localizations = MaterialLocalizations.of(context);
   return navigator.push(ModalSideSheetRoute<T>(
-    builder: (context) {
-      return SafeArea(
-        child: Column(
-          children: [
-            AppBar(
-              automaticallyImplyLeading: false,
-              title: Text(title),
-              centerTitle: false,
-              actions: const [
-                SizedBox(
-                  height: kToolbarHeight,
-                  width: kToolbarHeight,
-                  child: CloseButton(),
-                )
-              ],
-            ),
-            Expanded(
-              flex: 1,
-              child: body,
-            ),
-          ],
-        ),
-      );
-    },
+    builder: builder,
+    filter: filter,
     capturedThemes:
         InheritedTheme.capture(from: context, to: navigator.context),
     isScrollControlled: isScrollControlled,
@@ -633,3 +613,28 @@ Future<T?> showModalSideSheet<T>({
     useSafeArea: useSafeArea,
   ));
 }
+
+// class ModalAppBar extends StatelessWidget {
+//   final String title;
+//
+//   const ModalAppBar({
+//     super.key,
+//     required this.title,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return AppBar(
+//       automaticallyImplyLeading: false,
+//       title: Text(title),
+//       centerTitle: false,
+//       actions: const [
+//         SizedBox(
+//           height: kToolbarHeight,
+//           width: kToolbarHeight,
+//           child: CloseButton(),
+//         )
+//       ],
+//     );
+//   }
+// }

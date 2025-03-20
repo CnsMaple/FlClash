@@ -237,65 +237,21 @@ class ListPage<T> extends StatelessWidget {
 
   Widget _buildList() {
     final items = this.items.toList();
-    if (this.keyBuilder != null) {
-      return ReorderableListView.builder(
-        padding: const EdgeInsets.only(
-          bottom: 16 + 64,
-          left: 16,
-          right: 16,
-        ),
-        buildDefaultDragHandles: false,
-        itemCount: items.length,
-        itemBuilder: (_, index) {
-          final e = items[index];
-          return Padding(
-            key: keyBuilder!(e),
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: ReorderableDragStartListener(
-              index: index,
-              child: CommonCard(
-                child: ListItem(
-                  leading: leadingBuilder != null ? leadingBuilder!(e) : null,
-                  title: titleBuilder(e),
-                  subtitle:
-                      subtitleBuilder != null ? subtitleBuilder!(e) : null,
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete_outline),
-                    onPressed: () {
-                      _handleDelete(e);
-                    },
-                  ),
-                ),
-                onPressed: () {
-                  _handleAddOrEdit(e);
-                },
-              ),
-            ),
-          );
-        },
-        onReorder: (oldIndex, newIndex) {
-          if (oldIndex < newIndex) {
-            newIndex -= 1;
-          }
-          final nextItems = List<T>.from(items);
-          final item = nextItems.removeAt(oldIndex);
-          nextItems.insert(newIndex, item);
-          onChange(nextItems);
-        },
-      );
-    } else {
-      return ListView.builder(
-        padding: const EdgeInsets.only(
-          bottom: 16 + 64,
-          left: 16,
-          right: 16,
-        ),
-        itemCount: items.length,
-        itemBuilder: (_, index) {
-          final e = items[index];
-          return Padding(
-            key: ObjectKey(e.toString()),
-            padding: const EdgeInsets.symmetric(vertical: 8),
+    return ReorderableListView.builder(
+      padding: const EdgeInsets.only(
+        bottom: 16 + 64,
+        left: 16,
+        right: 16,
+      ),
+      buildDefaultDragHandles: false,
+      itemCount: items.length,
+      itemBuilder: (_, index) {
+        final e = items[index];
+        return Padding(
+          key: ValueKey(e),
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: ReorderableDragStartListener(
+            index: index,
             child: CommonCard(
               child: ListItem(
                 leading: leadingBuilder != null ? leadingBuilder!(e) : null,
@@ -312,10 +268,19 @@ class ListPage<T> extends StatelessWidget {
                 _handleAddOrEdit(e);
               },
             ),
-          );
-        },
-      );
-    }
+          ),
+        );
+      },
+      onReorder: (oldIndex, newIndex) {
+        if (oldIndex < newIndex) {
+          newIndex -= 1;
+        }
+        final nextItems = List<T>.from(items);
+        final item = nextItems.removeAt(oldIndex);
+        nextItems.insert(newIndex, item);
+        onChange(nextItems);
+      },
+    );
   }
 
   @override

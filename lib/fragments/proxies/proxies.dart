@@ -28,12 +28,11 @@ class _ProxiesFragmentState extends ConsumerState<ProxiesFragment>
         if (_hasProviders)
           IconButton(
             onPressed: () {
-              showExtendPage(
-                isScaffold: true,
-                extendPageWidth: 360,
+              showExtend(
                 context,
                 body: const ProvidersView(),
                 title: appLocalizations.providers,
+                props: ExtendProps(maxWidth: 360),
               );
             },
             icon: const Icon(
@@ -51,11 +50,13 @@ class _ProxiesFragmentState extends ConsumerState<ProxiesFragment>
               )
             : IconButton(
                 onPressed: () {
-                  showExtendPage(
+                  showExtend(
                     context,
-                    extendPageWidth: 360,
                     title: appLocalizations.iconConfiguration,
                     body: _IconConfigView(),
+                    props: ExtendProps(
+                      maxWidth: 360,
+                    ),
                   );
                 },
                 icon: const Icon(

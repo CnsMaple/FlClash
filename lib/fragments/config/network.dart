@@ -224,8 +224,8 @@ class BypassDomainItem extends StatelessWidget {
       title: Text(appLocalizations.bypassDomain),
       subtitle: Text(appLocalizations.bypassDomainDesc),
       delegate: OpenDelegate(
-        isBlur: false,
-        isScaffold: true,
+        blur: false,
+        maxWidth: 360,
         title: appLocalizations.bypassDomain,
         widget: Consumer(
           builder: (_, ref, __) {
@@ -246,7 +246,6 @@ class BypassDomainItem extends StatelessWidget {
             );
           },
         ),
-        extendPageWidth: 360,
       ),
     );
   }
@@ -298,8 +297,8 @@ class RouteAddressItem extends ConsumerWidget {
       title: Text(appLocalizations.routeAddress),
       subtitle: Text(appLocalizations.routeAddressDesc),
       delegate: OpenDelegate(
-        isBlur: false,
-        isScaffold: true,
+        blur: false,
+        maxWidth: 360,
         title: appLocalizations.routeAddress,
         widget: Consumer(
           builder: (_, ref, __) {
@@ -319,7 +318,6 @@ class RouteAddressItem extends ConsumerWidget {
             );
           },
         ),
-        extendPageWidth: 360,
       ),
     );
   }

@@ -199,7 +199,8 @@ class HostsItem extends StatelessWidget {
       title: const Text("Hosts"),
       subtitle: Text(appLocalizations.hostsDesc),
       delegate: OpenDelegate(
-        isBlur: false,
+        blur: false,
+        maxWidth: 360,
         title: "Hosts",
         widget: Consumer(
           builder: (_, ref, __) {
@@ -220,7 +221,6 @@ class HostsItem extends StatelessWidget {
             );
           },
         ),
-        extendPageWidth: 360,
       ),
     );
   }

@@ -49,28 +49,14 @@ class CheckboxDelegate<T> extends Delegate {
 class OpenDelegate extends Delegate {
   final Widget widget;
   final String title;
-  final double? extendPageWidth;
-  final bool isBlur;
-  final bool isScaffold;
+  final double? maxWidth;
+  final bool blur;
 
   const OpenDelegate({
     required this.title,
     required this.widget,
-    this.extendPageWidth,
-    this.isBlur = true,
-    this.isScaffold = false,
-  });
-}
-
-class NextDelegate extends Delegate {
-  final Widget widget;
-  final String title;
-  final double? extendPageWidth;
-
-  const NextDelegate({
-    required this.title,
-    required this.widget,
-    this.extendPageWidth,
+    this.maxWidth,
+    this.blur = true,
   });
 }
 
@@ -165,19 +151,6 @@ class ListItem<T> extends StatelessWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
     this.trailing,
     required InputDelegate this.delegate,
-    this.horizontalTitleGap,
-    this.prue,
-    this.tileTitleAlignment = ListTileTitleAlignment.center,
-  }) : onTap = null;
-
-  const ListItem.next({
-    super.key,
-    required this.title,
-    this.subtitle,
-    this.leading,
-    this.padding = const EdgeInsets.symmetric(horizontal: 16),
-    this.trailing,
-    required NextDelegate this.delegate,
     this.horizontalTitleGap,
     this.prue,
     this.tileTitleAlignment = ListTileTitleAlignment.center,
@@ -286,13 +259,13 @@ class ListItem<T> extends StatelessWidget {
           openAction() {
             final isMobile = globalState.appState.viewMode == ViewMode.mobile;
             if (!isMobile) {
-              showExtendPage(
+              showExtend(
                 context,
+                props: ExtendProps(
+                  blur: openDelegate.blur,
+                ),
                 body: child,
                 title: openDelegate.title,
-                extendPageWidth: openDelegate.extendPageWidth,
-                isBlur: openDelegate.isBlur,
-                isScaffold: openDelegate.isScaffold,
               );
               return;
             }
@@ -342,31 +315,6 @@ class ListItem<T> extends StatelessWidget {
             ),
           );
           inputDelegate.onChanged(value);
-        },
-      );
-    }
-    if (delegate is NextDelegate) {
-      final nextDelegate = delegate as NextDelegate;
-      return _buildListTile(
-        onTap: () {
-          final isMobile = globalState.appState.viewMode == ViewMode.mobile;
-          if (!isMobile) {
-            showExtendPage(
-              context,
-              body: nextDelegate.widget,
-              title: nextDelegate.title,
-              extendPageWidth: nextDelegate.extendPageWidth,
-            );
-            return;
-          }
-
-          BaseNavigator.push(
-              context,
-              CommonScaffold(
-                key: Key(nextDelegate.title),
-                body: nextDelegate.widget,
-                title: nextDelegate.title,
-              ));
         },
       );
     }

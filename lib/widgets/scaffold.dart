@@ -16,6 +16,7 @@ class CommonScaffold extends StatefulWidget {
   final Widget? leading;
   final List<Widget>? actions;
   final bool automaticallyImplyLeading;
+  final bool? centerTitle;
 
   const CommonScaffold({
     super.key,
@@ -26,6 +27,7 @@ class CommonScaffold extends StatefulWidget {
     required this.title,
     this.actions,
     this.automaticallyImplyLeading = true,
+    this.centerTitle,
   });
 
   CommonScaffold.open({
@@ -249,7 +251,7 @@ class CommonScaffoldState extends State<CommonScaffold> {
                       : widget.actions ?? []
                 ];
                 final appBar = AppBar(
-                  centerTitle: false,
+                  centerTitle: widget.centerTitle ?? false,
                   systemOverlayStyle: SystemUiOverlayStyle(
                     statusBarColor: Colors.transparent,
                     statusBarIconBrightness:

@@ -85,14 +85,12 @@ class CommonCard extends StatelessWidget {
   const CommonCard({
     super.key,
     bool? isSelected,
-    this.type = CommonCardType.filled,
+    this.type = CommonCardType.plain,
     this.onPressed,
     this.selectWidget,
-    this.backgroundColor,
     this.radius = 12,
     required this.child,
     this.enterAnimated = false,
-    this.borderSide,
     this.info,
   }) : isSelected = isSelected ?? false;
 
@@ -104,14 +102,15 @@ class CommonCard extends StatelessWidget {
   final Info? info;
   final CommonCardType type;
   final double radius;
-  final WidgetStateProperty<Color?>? backgroundColor;
-  final WidgetStateProperty<BorderSide?>? borderSide;
+
+  // final WidgetStateProperty<Color?>? backgroundColor;
+  // final WidgetStateProperty<BorderSide?>? borderSide;
 
   BorderSide getBorderSide(BuildContext context, Set<WidgetState> states) {
     final colorScheme = context.colorScheme;
-    // if (type == CommonCardType.filled) {
-    //   return BorderSide.none;
-    // }
+    if (type == CommonCardType.filled) {
+      return BorderSide.none;
+    }
     final hoverColor = isSelected
         ? colorScheme.primary.toLight
         : colorScheme.primary.toLighter;
@@ -128,26 +127,14 @@ class CommonCard extends StatelessWidget {
   }
 
   Color? getBackgroundColor(BuildContext context, Set<WidgetState> states) {
-    final colorScheme = context.colorScheme;
-    switch (type) {
-      case CommonCardType.plain:
-        if (isSelected) {
-          return colorScheme.secondaryContainer;
-        }
-        if (states.isEmpty) {
-          return colorScheme.surface;
-        }
-        return Theme.of(context)
-            .outlinedButtonTheme
-            .style
-            ?.backgroundColor
-            ?.resolve(states);
-      case CommonCardType.filled:
-        if (isSelected) {
-          return colorScheme.secondaryContainer;
-        }
-        return colorScheme.surfaceContainer;
+    if (type == CommonCardType.filled) {
+      return context.colorScheme.surfaceContainer;
     }
+    final colorScheme = context.colorScheme;
+    if (isSelected) {
+      return colorScheme.secondaryContainer;
+    }
+    return colorScheme.surfaceContainer;
   }
 
   @override
@@ -196,14 +183,12 @@ class CommonCard extends StatelessWidget {
         ),
         iconColor: WidgetStatePropertyAll(context.colorScheme.primary),
         iconSize: WidgetStateProperty.all(20),
-        backgroundColor: backgroundColor ??
-            WidgetStateProperty.resolveWith(
-              (states) => getBackgroundColor(context, states),
-            ),
-        side: borderSide ??
-            WidgetStateProperty.resolveWith(
-              (states) => getBorderSide(context, states),
-            ),
+        backgroundColor: WidgetStateProperty.resolveWith(
+          (states) => getBackgroundColor(context, states),
+        ),
+        side: WidgetStateProperty.resolveWith(
+          (states) => getBorderSide(context, states),
+        ),
       ),
       onPressed: onPressed,
       child: childWidget,

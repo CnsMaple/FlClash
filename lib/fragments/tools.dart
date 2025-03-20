@@ -35,7 +35,7 @@ class _ToolboxFragmentState extends ConsumerState<ToolsFragment> {
       delegate: OpenDelegate(
         title: Intl.message(navigationItem.label.name),
         widget: navigationItem.fragment,
-        extendPageWidth: 360,
+        maxWidth: 360,
       ),
     );
   }
@@ -155,7 +155,7 @@ class _ThemeItem extends StatelessWidget {
       delegate: OpenDelegate(
         title: appLocalizations.theme,
         widget: const ThemeFragment(),
-        extendPageWidth: 360,
+        maxWidth: 360,
       ),
     );
   }

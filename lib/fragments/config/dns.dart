@@ -205,7 +205,8 @@ class FakeIpFilterItem extends StatelessWidget {
     return ListItem.open(
       title: Text(appLocalizations.fakeipFilter),
       delegate: OpenDelegate(
-        isBlur: false,
+        blur: false,
+        maxWidth: 360,
         title: appLocalizations.fakeipFilter,
         widget: Consumer(
           builder: (_, ref, __) {
@@ -227,7 +228,6 @@ class FakeIpFilterItem extends StatelessWidget {
             );
           },
         ),
-        extendPageWidth: 360,
       ),
     );
   }
@@ -242,7 +242,8 @@ class DefaultNameserverItem extends StatelessWidget {
       title: Text(appLocalizations.defaultNameserver),
       subtitle: Text(appLocalizations.defaultNameserverDesc),
       delegate: OpenDelegate(
-        isBlur: false,
+        blur: false,
+        maxWidth: 360,
         title: appLocalizations.defaultNameserver,
         widget: Consumer(builder: (_, ref, __) {
           final defaultNameserver = ref.watch(
@@ -262,7 +263,6 @@ class DefaultNameserverItem extends StatelessWidget {
             },
           );
         }),
-        extendPageWidth: 360,
       ),
     );
   }
@@ -278,7 +278,8 @@ class NameserverItem extends StatelessWidget {
       subtitle: Text(appLocalizations.nameserverDesc),
       delegate: OpenDelegate(
         title: appLocalizations.nameserver,
-        isBlur: false,
+        blur: false,
+        maxWidth: 360,
         widget: Consumer(builder: (_, ref, __) {
           final nameserver = ref.watch(
             patchClashConfigProvider.select((state) => state.dns.nameserver),
@@ -296,7 +297,6 @@ class NameserverItem extends StatelessWidget {
             },
           );
         }),
-        extendPageWidth: 360,
       ),
     );
   }
@@ -357,7 +357,8 @@ class NameserverPolicyItem extends StatelessWidget {
       title: Text(appLocalizations.nameserverPolicy),
       subtitle: Text(appLocalizations.nameserverPolicyDesc),
       delegate: OpenDelegate(
-        isBlur: false,
+        blur: false,
+        maxWidth: 360,
         title: appLocalizations.nameserverPolicy,
         widget: Consumer(builder: (_, ref, __) {
           final nameserverPolicy = ref.watch(
@@ -378,7 +379,6 @@ class NameserverPolicyItem extends StatelessWidget {
             },
           );
         }),
-        extendPageWidth: 360,
       ),
     );
   }
@@ -393,7 +393,8 @@ class ProxyServerNameserverItem extends StatelessWidget {
       title: Text(appLocalizations.proxyNameserver),
       subtitle: Text(appLocalizations.proxyNameserverDesc),
       delegate: OpenDelegate(
-        isBlur: false,
+        blur: false,
+        maxWidth: 360,
         title: appLocalizations.proxyNameserver,
         widget: Consumer(
           builder: (_, ref, __) {
@@ -415,7 +416,6 @@ class ProxyServerNameserverItem extends StatelessWidget {
             );
           },
         ),
-        extendPageWidth: 360,
       ),
     );
   }
@@ -430,7 +430,8 @@ class FallbackItem extends StatelessWidget {
       title: Text(appLocalizations.fallback),
       subtitle: Text(appLocalizations.fallbackDesc),
       delegate: OpenDelegate(
-        isBlur: false,
+        blur: false,
+        maxWidth: 360,
         title: appLocalizations.fallback,
         widget: Consumer(builder: (_, ref, __) {
           final fallback = ref.watch(
@@ -449,7 +450,6 @@ class FallbackItem extends StatelessWidget {
             },
           );
         }),
-        extendPageWidth: 360,
       ),
     );
   }
@@ -518,7 +518,8 @@ class GeositeItem extends StatelessWidget {
     return ListItem.open(
       title: const Text("Geosite"),
       delegate: OpenDelegate(
-        isBlur: false,
+        blur: false,
+        maxWidth: 360,
         title: "Geosite",
         widget: Consumer(builder: (_, ref, __) {
           final geosite = ref.watch(
@@ -538,7 +539,6 @@ class GeositeItem extends StatelessWidget {
             },
           );
         }),
-        extendPageWidth: 360,
       ),
     );
   }
@@ -552,7 +552,8 @@ class IpcidrItem extends StatelessWidget {
     return ListItem.open(
       title: Text(appLocalizations.ipcidr),
       delegate: OpenDelegate(
-        isBlur: false,
+        blur: false,
+        maxWidth: 360,
         title: appLocalizations.ipcidr,
         widget: Consumer(builder: (_, ref, ___) {
           final ipcidr = ref.watch(
@@ -572,7 +573,6 @@ class IpcidrItem extends StatelessWidget {
             },
           );
         }),
-        extendPageWidth: 360,
       ),
     );
   }
@@ -586,7 +586,8 @@ class DomainItem extends StatelessWidget {
     return ListItem.open(
       title: Text(appLocalizations.domain),
       delegate: OpenDelegate(
-        isBlur: false,
+        blur: false,
+        maxWidth: 360,
         title: appLocalizations.domain,
         widget: Consumer(builder: (_, ref, __) {
           final domain = ref.watch(
@@ -606,7 +607,6 @@ class DomainItem extends StatelessWidget {
             },
           );
         }),
-        extendPageWidth: 360,
       ),
     );
   }
