@@ -263,9 +263,15 @@ class ListItem<T> extends StatelessWidget {
                 context,
                 props: ExtendProps(
                   blur: openDelegate.blur,
+                  maxWidth: openDelegate.maxWidth,
                 ),
-                body: child,
-                title: openDelegate.title,
+                builder: (_, type) {
+                  return AdaptiveSheetScaffold(
+                    type: type,
+                    body: child,
+                    title: openDelegate.title,
+                  );
+                },
               );
               return;
             }

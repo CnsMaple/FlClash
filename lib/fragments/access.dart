@@ -150,9 +150,14 @@ class _AccessFragmentState extends ConsumerState<AccessFragment> {
     return IconButton(
       onPressed: () async {
         final res = await showSheet<int>(
-          title: appLocalizations.proxiesSetting,
           context: context,
-          body: AccessControlPanel(),
+          builder: (_, type) {
+            return AdaptiveSheetScaffold(
+              type: type,
+              body: AccessControlPanel(),
+              title: appLocalizations.proxiesSetting,
+            );
+          },
         );
         if (res == 1) {
           _intelligentSelected();

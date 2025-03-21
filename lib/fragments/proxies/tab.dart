@@ -67,44 +67,48 @@ class ProxiesTabFragmentState extends ConsumerState<ProxiesTabFragment>
   _showMoreMenu() {
     showSheet(
       context: context,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Consumer(
-          builder: (_, ref, __) {
-            final state = ref.watch(proxiesSelectorStateProvider);
-            return SizedBox(
-              width: double.infinity,
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                runSpacing: 8,
-                spacing: 8,
-                children: [
-                  for (final groupName in state.groupNames)
-                    SettingTextCard(
-                      groupName,
-                      onPressed: () {
-                        final index = state.groupNames.indexWhere(
-                          (item) => item == groupName,
-                        );
-                        if (index == -1) return;
-                        _tabController?.animateTo(index);
-                        globalState.appController
-                            .updateCurrentGroupName(groupName);
-                        Navigator.of(context).pop();
-                      },
-                      isSelected: groupName == state.currentGroupName,
-                    )
-                ],
-              ),
-            );
-          },
-        ),
-      ),
       props: SheetProps(
-        maxWidth: 360,
         isScrollControlled: false,
       ),
-      title: appLocalizations.proxyGroup,
+      builder: (_, type) {
+        return AdaptiveSheetScaffold(
+          type: type,
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Consumer(
+              builder: (_, ref, __) {
+                final state = ref.watch(proxiesSelectorStateProvider);
+                return SizedBox(
+                  width: double.infinity,
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    runSpacing: 8,
+                    spacing: 8,
+                    children: [
+                      for (final groupName in state.groupNames)
+                        SettingTextCard(
+                          groupName,
+                          onPressed: () {
+                            final index = state.groupNames.indexWhere(
+                              (item) => item == groupName,
+                            );
+                            if (index == -1) return;
+                            _tabController?.animateTo(index);
+                            globalState.appController
+                                .updateCurrentGroupName(groupName);
+                            Navigator.of(context).pop();
+                          },
+                          isSelected: groupName == state.currentGroupName,
+                        )
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+          title: appLocalizations.proxyGroup,
+        );
+      },
     );
   }
 

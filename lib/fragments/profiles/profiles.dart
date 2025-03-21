@@ -26,10 +26,15 @@ class _ProfilesFragmentState extends State<ProfilesFragment> with PageMixin {
   _handleShowAddExtendPage() {
     showExtend(
       globalState.navigatorKey.currentState!.context,
-      body: AddProfile(
-        context: globalState.navigatorKey.currentState!.context,
-      ),
-      title: "${appLocalizations.add}${appLocalizations.profile}",
+      builder: (_, type) {
+        return AdaptiveSheetScaffold(
+          type: type,
+          body: AddProfile(
+            context: globalState.navigatorKey.currentState!.context,
+          ),
+          title: "${appLocalizations.add}${appLocalizations.profile}",
+        );
+      },
     );
   }
 
@@ -81,12 +86,17 @@ class _ProfilesFragmentState extends State<ProfilesFragment> with PageMixin {
           onPressed: () {
             final profiles = globalState.config.profiles;
             showSheet(
-              title: appLocalizations.profilesSort,
               context: context,
-              body: SizedBox(
-                height: 400,
-                child: ReorderableProfiles(profiles: profiles),
-              ),
+              builder: (_, type) {
+                return AdaptiveSheetScaffold(
+                  type: type,
+                  body: SizedBox(
+                    height: 400,
+                    child: ReorderableProfiles(profiles: profiles),
+                  ),
+                  title: appLocalizations.profilesSort,
+                );
+              },
             );
           },
           icon: const Icon(Icons.sort),
@@ -207,11 +217,16 @@ class ProfileItem extends StatelessWidget {
   _handleShowEditExtendPage(BuildContext context) {
     showExtend(
       context,
-      body: EditProfile(
-        profile: profile,
-        context: context,
-      ),
-      title: "${appLocalizations.edit}${appLocalizations.profile}",
+      builder: (_, type) {
+        return AdaptiveSheetScaffold(
+          type: type,
+          body: EditProfile(
+            profile: profile,
+            context: context,
+          ),
+          title: "${appLocalizations.edit}${appLocalizations.profile}",
+        );
+      },
     );
   }
 

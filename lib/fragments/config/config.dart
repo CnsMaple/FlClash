@@ -23,7 +23,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
         delegate: OpenDelegate(
           title: appLocalizations.network,
           blur: false,
-          maxWidth: 360,
           widget: const NetworkListView(),
         ),
       ),
@@ -37,7 +36,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
             generalItems,
           ),
           blur: false,
-          maxWidth: 360,
         ),
       ),
       ListItem.open(
@@ -48,7 +46,6 @@ class _ConfigFragmentState extends State<ConfigFragment> {
           title: "DNS",
           widget: DnsListView(),
           blur: false,
-          maxWidth: 360,
         ),
       )
     ];

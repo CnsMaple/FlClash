@@ -238,7 +238,7 @@ class CommonScaffoldState extends State<CommonScaffold> {
             ValueListenableBuilder<CommonAppBarState>(
               valueListenable: _appBarState,
               builder: (_, state, __) {
-                final realActions = [
+                final realActions = <Widget>[
                   if (state.onSearch != null)
                     IconButton(
                       onPressed: () {
@@ -291,23 +291,14 @@ class CommonScaffoldState extends State<CommonScaffold> {
                       : Text(widget.title),
                   actions: [
                     if (state.searching)
-                      IconButton(
-                        onPressed: _handleClear,
-                        icon: Icon(Icons.close),
-                      )
+                      ...genActions([
+                        IconButton(
+                          onPressed: _handleClear,
+                          icon: Icon(Icons.close),
+                        ),
+                      ])
                     else
-                      Row(
-                        children: [
-                          ...realActions.separated(
-                            SizedBox(
-                              width: 4,
-                            ),
-                          )
-                        ],
-                      ),
-                    SizedBox(
-                      width: 8,
-                    )
+                      ...genActions(realActions)
                   ],
                 );
                 return FadeBox(
@@ -368,4 +359,17 @@ class CommonScaffoldState extends State<CommonScaffold> {
           )
         : scaffold;
   }
+}
+
+List<Widget> genActions(List<Widget> actions) {
+  return <Widget>[
+    ...actions.separated(
+      SizedBox(
+        width: 4,
+      ),
+    ),
+    SizedBox(
+      width: 8,
+    )
+  ];
 }

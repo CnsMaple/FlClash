@@ -99,23 +99,27 @@ class SuperGridState extends State<SuperGrid> with TickerProviderStateMixin {
       return;
     }
     showSheet(
-      props: SheetProps(maxWidth: 360),
-      body: ValueListenableBuilder(
-        valueListenable: addedChildrenNotifier,
-        builder: (_, value, __) {
-          return _AddedWidgetsModal(
-            items: value,
-            onAdd: (gridItem) {
-              _childrenNotifier.value = List.from(_childrenNotifier.value)
-                ..add(
-                  gridItem,
-                );
-            },
-          );
-        },
-      ),
+      builder: (_, type) {
+        return ValueListenableBuilder(
+          valueListenable: addedChildrenNotifier,
+          builder: (_, value, __) {
+            return AdaptiveSheetScaffold(
+              type: type,
+              body: _AddedWidgetsModal(
+                items: value,
+                onAdd: (gridItem) {
+                  _childrenNotifier.value = List.from(_childrenNotifier.value)
+                    ..add(
+                      gridItem,
+                    );
+                },
+              ),
+              title: appLocalizations.add,
+            );
+          },
+        );
+      },
       context: context,
-      title: appLocalizations.add,
     );
   }
 

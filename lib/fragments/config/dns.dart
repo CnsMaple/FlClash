@@ -206,7 +206,6 @@ class FakeIpFilterItem extends StatelessWidget {
       title: Text(appLocalizations.fakeipFilter),
       delegate: OpenDelegate(
         blur: false,
-        maxWidth: 360,
         title: appLocalizations.fakeipFilter,
         widget: Consumer(
           builder: (_, ref, __) {
@@ -243,7 +242,6 @@ class DefaultNameserverItem extends StatelessWidget {
       subtitle: Text(appLocalizations.defaultNameserverDesc),
       delegate: OpenDelegate(
         blur: false,
-        maxWidth: 360,
         title: appLocalizations.defaultNameserver,
         widget: Consumer(builder: (_, ref, __) {
           final defaultNameserver = ref.watch(
@@ -279,7 +277,6 @@ class NameserverItem extends StatelessWidget {
       delegate: OpenDelegate(
         title: appLocalizations.nameserver,
         blur: false,
-        maxWidth: 360,
         widget: Consumer(builder: (_, ref, __) {
           final nameserver = ref.watch(
             patchClashConfigProvider.select((state) => state.dns.nameserver),
@@ -358,7 +355,6 @@ class NameserverPolicyItem extends StatelessWidget {
       subtitle: Text(appLocalizations.nameserverPolicyDesc),
       delegate: OpenDelegate(
         blur: false,
-        maxWidth: 360,
         title: appLocalizations.nameserverPolicy,
         widget: Consumer(builder: (_, ref, __) {
           final nameserverPolicy = ref.watch(
@@ -394,7 +390,6 @@ class ProxyServerNameserverItem extends StatelessWidget {
       subtitle: Text(appLocalizations.proxyNameserverDesc),
       delegate: OpenDelegate(
         blur: false,
-        maxWidth: 360,
         title: appLocalizations.proxyNameserver,
         widget: Consumer(
           builder: (_, ref, __) {
@@ -431,7 +426,6 @@ class FallbackItem extends StatelessWidget {
       subtitle: Text(appLocalizations.fallbackDesc),
       delegate: OpenDelegate(
         blur: false,
-        maxWidth: 360,
         title: appLocalizations.fallback,
         widget: Consumer(builder: (_, ref, __) {
           final fallback = ref.watch(
@@ -519,7 +513,6 @@ class GeositeItem extends StatelessWidget {
       title: const Text("Geosite"),
       delegate: OpenDelegate(
         blur: false,
-        maxWidth: 360,
         title: "Geosite",
         widget: Consumer(builder: (_, ref, __) {
           final geosite = ref.watch(
@@ -553,7 +546,6 @@ class IpcidrItem extends StatelessWidget {
       title: Text(appLocalizations.ipcidr),
       delegate: OpenDelegate(
         blur: false,
-        maxWidth: 360,
         title: appLocalizations.ipcidr,
         widget: Consumer(builder: (_, ref, ___) {
           final ipcidr = ref.watch(
@@ -587,7 +579,6 @@ class DomainItem extends StatelessWidget {
       title: Text(appLocalizations.domain),
       delegate: OpenDelegate(
         blur: false,
-        maxWidth: 360,
         title: appLocalizations.domain,
         widget: Consumer(builder: (_, ref, __) {
           final domain = ref.watch(

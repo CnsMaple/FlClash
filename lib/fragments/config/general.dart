@@ -200,7 +200,6 @@ class HostsItem extends StatelessWidget {
       subtitle: Text(appLocalizations.hostsDesc),
       delegate: OpenDelegate(
         blur: false,
-        maxWidth: 360,
         title: "Hosts",
         widget: Consumer(
           builder: (_, ref, __) {

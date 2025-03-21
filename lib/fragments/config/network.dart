@@ -225,7 +225,6 @@ class BypassDomainItem extends StatelessWidget {
       subtitle: Text(appLocalizations.bypassDomainDesc),
       delegate: OpenDelegate(
         blur: false,
-        maxWidth: 360,
         title: appLocalizations.bypassDomain,
         widget: Consumer(
           builder: (_, ref, __) {

@@ -30,9 +30,13 @@ class _ProxiesFragmentState extends ConsumerState<ProxiesFragment>
             onPressed: () {
               showExtend(
                 context,
-                body: const ProvidersView(),
-                title: appLocalizations.providers,
-                props: ExtendProps(maxWidth: 360),
+                builder: (_, type) {
+                  return AdaptiveSheetScaffold(
+                    type: type,
+                    body: const ProvidersView(),
+                    title: appLocalizations.providers,
+                  );
+                },
               );
             },
             icon: const Icon(
@@ -52,11 +56,13 @@ class _ProxiesFragmentState extends ConsumerState<ProxiesFragment>
                 onPressed: () {
                   showExtend(
                     context,
-                    title: appLocalizations.iconConfiguration,
-                    body: _IconConfigView(),
-                    props: ExtendProps(
-                      maxWidth: 360,
-                    ),
+                    builder: (_, type) {
+                      return AdaptiveSheetScaffold(
+                        type: type,
+                        body: const _IconConfigView(),
+                        title: appLocalizations.iconConfiguration,
+                      );
+                    },
                   );
                 },
                 icon: const Icon(
@@ -66,9 +72,17 @@ class _ProxiesFragmentState extends ConsumerState<ProxiesFragment>
         IconButton(
           onPressed: () {
             showSheet(
-              title: appLocalizations.proxiesSetting,
               context: context,
-              body: const ProxiesSetting(),
+              props: SheetProps(
+                isScrollControlled: true,
+              ),
+              builder: (_, type) {
+                return AdaptiveSheetScaffold(
+                  type: type,
+                  body: const ProxiesSetting(),
+                  title: appLocalizations.proxiesSetting,
+                );
+              },
             );
           },
           icon: const Icon(

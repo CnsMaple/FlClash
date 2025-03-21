@@ -2,22 +2,22 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/state.dart';
-import 'package:fl_clash/widgets/scaffold.dart';
 import 'package:flutter/material.dart';
 
+import 'scaffold.dart';
 import 'side_sheet.dart';
 
 @immutable
 class SheetProps {
-  final double maxWidth;
-  final double maxHeight;
+  final double? maxWidth;
+  final double? maxHeight;
   final bool isScrollControlled;
   final bool useSafeArea;
   final bool blur;
 
   const SheetProps({
-    this.maxWidth = 300,
-    this.maxHeight = 400,
+    this.maxWidth,
+    this.maxHeight,
     this.useSafeArea = true,
     this.isScrollControlled = false,
     this.blur = true,
@@ -26,22 +26,28 @@ class SheetProps {
 
 @immutable
 class ExtendProps {
-  final double maxWidth;
+  final double? maxWidth;
   final bool useSafeArea;
   final bool blur;
 
   const ExtendProps({
-    this.maxWidth = 300,
+    this.maxWidth,
     this.useSafeArea = true,
     this.blur = true,
   });
 }
 
+enum SheetType {
+  page,
+  bottomSheet,
+  sideSheet,
+}
+
+typedef SheetBuilder = Widget Function(BuildContext context, SheetType type);
+
 Future<T?> showSheet<T>({
   required BuildContext context,
-  required Widget body,
-  required String title,
-  Widget? action,
+  required SheetBuilder builder,
   SheetProps props = const SheetProps(),
 }) {
   final isMobile = globalState.appState.viewMode == ViewMode.mobile;
@@ -49,13 +55,12 @@ Future<T?> showSheet<T>({
     true => showModalBottomSheet<T>(
         context: context,
         isScrollControlled: props.isScrollControlled,
-        constraints: BoxConstraints(
-          maxHeight: props.maxHeight,
-        ),
         builder: (_) {
-          return body;
+          return SafeArea(
+            child: builder(context, SheetType.bottomSheet),
+          );
         },
-        showDragHandle: true,
+        showDragHandle: false,
         useSafeArea: props.useSafeArea,
       ),
     false => showModalSideSheet<T>(
@@ -63,17 +68,11 @@ Future<T?> showSheet<T>({
         isScrollControlled: props.isScrollControlled,
         context: context,
         constraints: BoxConstraints(
-          maxWidth: props.maxWidth,
+          maxWidth: props.maxWidth ?? 360,
         ),
         filter: props.blur ? filter : null,
-        builder: (context) {
-          return CommonScaffold(
-            automaticallyImplyLeading: action == null ? false : true,
-            centerTitle: false,
-            body: body,
-            title: title,
-            actions: [action ?? CloseButton()],
-          );
+        builder: (_) {
+          return builder(context, SheetType.sideSheet);
         },
       ),
   };
@@ -81,39 +80,97 @@ Future<T?> showSheet<T>({
 
 Future<T?> showExtend<T>(
   BuildContext context, {
-  required Widget body,
+  required SheetBuilder builder,
   ExtendProps props = const ExtendProps(),
-  required String title,
-  Widget? action,
 }) {
   final isMobile = globalState.appState.viewMode == ViewMode.mobile;
   return switch (isMobile) {
     true => BaseNavigator.push(
         context,
-        CommonScaffold(
-          body: body,
-          title: title,
-          actions: [
-            if (action != null) action,
-          ],
-        ),
+        builder(context, SheetType.page),
       ),
     false => showModalSideSheet<T>(
         useSafeArea: props.useSafeArea,
         context: context,
         constraints: BoxConstraints(
-          maxWidth: props.maxWidth,
+          maxWidth: props.maxWidth ?? 360,
         ),
         filter: props.blur ? filter : null,
         builder: (context) {
-          return CommonScaffold(
-            automaticallyImplyLeading: action == null ? false : true,
-            centerTitle: false,
-            body: body,
-            title: title,
-            actions: [action ?? CloseButton()],
-          );
+          return builder(context, SheetType.sideSheet);
         },
       ),
   };
+}
+
+class AdaptiveSheetScaffold extends StatefulWidget {
+  final SheetType type;
+  final Widget body;
+  final String title;
+  final List<Widget> actions;
+
+  const AdaptiveSheetScaffold({
+    super.key,
+    required this.type,
+    required this.body,
+    required this.title,
+    this.actions = const [],
+  });
+
+  @override
+  State<AdaptiveSheetScaffold> createState() => _AdaptiveSheetScaffoldState();
+}
+
+class _AdaptiveSheetScaffoldState extends State<AdaptiveSheetScaffold> {
+  @override
+  Widget build(BuildContext context) {
+    final backgroundColor = context.colorScheme.surfaceContainerLow;
+    final bottomSheet = widget.type == SheetType.bottomSheet;
+    final appBar = AppBar(
+      forceMaterialTransparency: bottomSheet ? true : false,
+      automaticallyImplyLeading: widget.actions.isEmpty ? false : true,
+      centerTitle: bottomSheet,
+      backgroundColor: backgroundColor,
+      title: Text(
+        widget.title,
+      ),
+      actions: genActions([
+        if (widget.actions.isEmpty) CloseButton(),
+      ]),
+    );
+    if (widget.type == SheetType.bottomSheet) {
+      final handleSize = Size(32, 4);
+      return Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28.0)),
+          color: backgroundColor,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Container(
+                alignment: Alignment.center,
+                height: handleSize.height,
+                width: handleSize.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(handleSize.height / 2),
+                  color: context.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+            appBar,
+            widget.body
+          ],
+        ),
+      );
+    }
+    return Scaffold(
+      appBar: appBar,
+      backgroundColor: backgroundColor,
+      body: widget.body,
+    );
+  }
 }
