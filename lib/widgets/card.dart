@@ -85,7 +85,7 @@ class CommonCard extends StatelessWidget {
   const CommonCard({
     super.key,
     bool? isSelected,
-    this.type = CommonCardType.plain,
+    this.type = CommonCardType.filled,
     this.onPressed,
     this.selectWidget,
     this.radius = 12,
@@ -134,7 +134,7 @@ class CommonCard extends StatelessWidget {
     if (isSelected) {
       return colorScheme.secondaryContainer;
     }
-    return colorScheme.surfaceContainer;
+    return colorScheme.surfaceContainerHighest;
   }
 
   @override
@@ -217,6 +217,39 @@ class SelectIcon extends StatelessWidget {
           Icons.check,
           size: 16,
         ),
+      ),
+    );
+  }
+}
+
+class SettingsBlock extends StatelessWidget {
+  final String title;
+  final List<Widget> settings;
+
+  const SettingsBlock({
+    super.key,
+    required this.title,
+    required this.settings,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: Column(
+        children: [
+          InfoHeader(
+            info: Info(
+              label: title,
+            ),
+          ),
+          Card(
+            color: context.colorScheme.surfaceContainer,
+            child: Column(
+              children: settings,
+            ),
+          ),
+        ],
       ),
     );
   }

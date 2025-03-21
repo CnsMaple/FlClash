@@ -64,7 +64,7 @@ class _ToolboxFragmentState extends ConsumerState<ToolsFragment> {
     );
   }
 
-  List<Widget> _getSettingList() {
+  _getSettingList() {
     return generateSection(
       title: appLocalizations.settings,
       items: [

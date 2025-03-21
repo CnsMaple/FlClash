@@ -124,18 +124,29 @@ class AdaptiveSheetScaffold extends StatefulWidget {
 class _AdaptiveSheetScaffoldState extends State<AdaptiveSheetScaffold> {
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = context.colorScheme.surfaceContainerLow;
+    final backgroundColor = context.colorScheme.surface;
     final bottomSheet = widget.type == SheetType.bottomSheet;
+    final sideSheet = widget.type == SheetType.sideSheet;
     final appBar = AppBar(
       forceMaterialTransparency: bottomSheet ? true : false,
-      automaticallyImplyLeading: widget.actions.isEmpty ? false : true,
+      automaticallyImplyLeading: widget.actions.isEmpty && sideSheet
+          ? false
+          : bottomSheet
+              ? false
+              : true,
       centerTitle: bottomSheet,
       backgroundColor: backgroundColor,
+      // titleTextStyle: bottomSheet
+      //     ? context.textTheme.labelMedium?.copyWith(
+      //         fontSize: 20,
+      //       )
+      //     : null,
       title: Text(
         widget.title,
       ),
       actions: genActions([
         if (widget.actions.isEmpty) CloseButton(),
+        ...widget.actions,
       ]),
     );
     if (widget.type == SheetType.bottomSheet) {
@@ -162,7 +173,10 @@ class _AdaptiveSheetScaffoldState extends State<AdaptiveSheetScaffold> {
               ),
             ),
             appBar,
-            widget.body
+            Flexible(
+              flex: 1,
+              child: widget.body,
+            )
           ],
         ),
       );

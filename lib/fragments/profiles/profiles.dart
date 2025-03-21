@@ -88,13 +88,9 @@ class _ProfilesFragmentState extends State<ProfilesFragment> with PageMixin {
             showSheet(
               context: context,
               builder: (_, type) {
-                return AdaptiveSheetScaffold(
+                return ReorderableProfilesSheet(
                   type: type,
-                  body: SizedBox(
-                    height: 400,
-                    child: ReorderableProfiles(profiles: profiles),
-                  ),
-                  title: appLocalizations.profilesSort,
+                  profiles: profiles,
                 );
               },
             );
@@ -412,19 +408,22 @@ class ProfileItem extends StatelessWidget {
   }
 }
 
-class ReorderableProfiles extends StatefulWidget {
+class ReorderableProfilesSheet extends StatefulWidget {
   final List<Profile> profiles;
+  final SheetType type;
 
-  const ReorderableProfiles({
+  const ReorderableProfilesSheet({
     super.key,
     required this.profiles,
+    required this.type,
   });
 
   @override
-  State<ReorderableProfiles> createState() => _ReorderableProfilesState();
+  State<ReorderableProfilesSheet> createState() =>
+      _ReorderableProfilesSheetState();
 }
 
-class _ReorderableProfilesState extends State<ReorderableProfiles> {
+class _ReorderableProfilesSheetState extends State<ReorderableProfilesSheet> {
   late List<Profile> profiles;
 
   @override
@@ -468,74 +467,61 @@ class _ReorderableProfilesState extends State<ReorderableProfiles> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Expanded(
-          flex: 1,
-          child: ReorderableListView.builder(
-            buildDefaultDragHandles: false,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            proxyDecorator: proxyDecorator,
-            onReorder: (oldIndex, newIndex) {
-              setState(() {
-                if (oldIndex < newIndex) {
-                  newIndex -= 1;
-                }
-                final profile = profiles.removeAt(oldIndex);
-                profiles.insert(newIndex, profile);
-              });
-            },
-            itemBuilder: (_, index) {
-              final profile = profiles[index];
-              return Container(
-                key: Key(profile.id),
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: CommonCard(
-                  type: CommonCardType.filled,
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.only(
-                      right: 16,
-                      left: 16,
-                    ),
-                    title: Text(profile.label ?? profile.id),
-                    trailing: ReorderableDragStartListener(
-                      index: index,
-                      child: const Icon(Icons.drag_handle),
-                    ),
+    return AdaptiveSheetScaffold(
+      type: widget.type,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            globalState.appController.setProfiles(profiles);
+          },
+          icon: Icon(
+            Icons.save,
+          ),
+        )
+      ],
+      body: Padding(
+        padding: EdgeInsets.only(bottom: 32),
+        child: ReorderableListView.builder(
+          buildDefaultDragHandles: false,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+          ),
+          proxyDecorator: proxyDecorator,
+          onReorder: (oldIndex, newIndex) {
+            setState(() {
+              if (oldIndex < newIndex) {
+                newIndex -= 1;
+              }
+              final profile = profiles.removeAt(oldIndex);
+              profiles.insert(newIndex, profile);
+            });
+          },
+          itemBuilder: (_, index) {
+            final profile = profiles[index];
+            return Container(
+              key: Key(profile.id),
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: CommonCard(
+                type: CommonCardType.filled,
+                child: ListTile(
+                  contentPadding: const EdgeInsets.only(
+                    right: 16,
+                    left: 16,
+                  ),
+                  title: Text(profile.label ?? profile.id),
+                  trailing: ReorderableDragStartListener(
+                    index: index,
+                    child: const Icon(Icons.drag_handle),
                   ),
                 ),
-              );
-            },
-            itemCount: profiles.length,
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(
-            vertical: 16,
-            horizontal: 24,
-          ),
-          child: FilledButton.tonal(
-            onPressed: () {
-              Navigator.of(context).pop();
-              globalState.appController.setProfiles(profiles);
-            },
-            style: ButtonStyle(
-              padding: WidgetStateProperty.all(
-                const EdgeInsets.symmetric(vertical: 8),
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  appLocalizations.confirm,
-                ),
-              ],
-            ),
-          ),
+            );
+          },
+          itemCount: profiles.length,
         ),
-      ],
+      ),
+      title: appLocalizations.profilesSort,
     );
   }
 }

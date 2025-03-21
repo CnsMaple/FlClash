@@ -393,9 +393,11 @@ class ListHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 12,
+      padding: const EdgeInsets.only(
+        right: 16,
+        left: 16,
+        top: 24,
+        bottom: 8,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -404,7 +406,8 @@ class ListHeader extends StatelessWidget {
           Text(
             title,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
                 ),
           ),
           Expanded(
