@@ -231,7 +231,7 @@ class BypassDomainItem extends StatelessWidget {
             _initActions(context, ref);
             final bypassDomain = ref.watch(
                 networkSettingProvider.select((state) => state.bypassDomain));
-            return ListPage(
+            return ListInputPage(
               title: appLocalizations.bypassDomain,
               items: bypassDomain,
               titleBuilder: (item) => Text(item),
@@ -303,7 +303,7 @@ class RouteAddressItem extends ConsumerWidget {
           builder: (_, ref, __) {
             final routeAddress = ref.watch(patchClashConfigProvider
                 .select((state) => state.tun.routeAddress));
-            return ListPage(
+            return ListInputPage(
               title: appLocalizations.routeAddress,
               items: routeAddress,
               titleBuilder: (item) => Text(item),

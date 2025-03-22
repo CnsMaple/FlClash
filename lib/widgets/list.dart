@@ -50,12 +50,14 @@ class OpenDelegate extends Delegate {
   final Widget widget;
   final String title;
   final double? maxWidth;
+  final Widget? action;
   final bool blur;
 
   const OpenDelegate({
     required this.title,
     required this.widget,
     this.maxWidth,
+    this.action,
     this.blur = true,
   });
 }
@@ -267,6 +269,10 @@ class ListItem<T> extends StatelessWidget {
                 ),
                 builder: (_, type) {
                   return AdaptiveSheetScaffold(
+                    actions: [
+                      if(openDelegate.action != null)
+                        openDelegate.action!,
+                    ],
                     type: type,
                     body: child,
                     title: openDelegate.title,
@@ -277,7 +283,6 @@ class ListItem<T> extends StatelessWidget {
             }
             action();
           }
-
           return _buildListTile(
             onTap: openAction,
           );

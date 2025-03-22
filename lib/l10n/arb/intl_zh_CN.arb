@@ -346,5 +346,7 @@
   "exportFile": "导出文件",
   "cacheCorrupt": "缓存已损坏，是否清空？",
   "detectionTip": "依赖第三方api，仅供参考",
-  "listen": "监听"
+  "listen": "监听",
+  "keyExists": "当前键已存在",
+  "valueExists": "当前值已存在"
 }

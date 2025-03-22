@@ -2,8 +2,13 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/fragments/config/dns.dart';
 import 'package:fl_clash/fragments/config/general.dart';
 import 'package:fl_clash/fragments/config/network.dart';
+import 'package:fl_clash/models/clash_config.dart';
+import 'package:fl_clash/providers/config.dart' show patchClashConfigProvider;
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../state.dart';
 
 class ConfigFragment extends StatefulWidget {
   const ConfigFragment({super.key});
@@ -42,9 +47,34 @@ class _ConfigFragmentState extends State<ConfigFragment> {
         title: const Text("DNS"),
         subtitle: Text(appLocalizations.dnsDesc),
         leading: const Icon(Icons.dns),
-        delegate: const OpenDelegate(
+        delegate: OpenDelegate(
           title: "DNS",
-          widget: DnsListView(),
+          action: Consumer(builder: (_, ref, __) {
+            return IconButton(
+              onPressed: () async {
+                final res = await globalState.showMessage(
+                  title: appLocalizations.reset,
+                  message: TextSpan(
+                    text: appLocalizations.resetTip,
+                  ),
+                );
+                if (res != true) {
+                  return;
+                }
+
+                ref.read(patchClashConfigProvider.notifier).updateState(
+                      (state) => state.copyWith(
+                        dns: defaultDns,
+                      ),
+                    );
+              },
+              tooltip: appLocalizations.reset,
+              icon: const Icon(
+                Icons.replay,
+              ),
+            );
+          }),
+          widget: const DnsListView(),
           blur: false,
         ),
       )

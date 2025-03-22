@@ -302,6 +302,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tcp keep alive interval",
     ),
     "key": MessageLookupByLibrary.simpleMessage("Key"),
+    "keyExists": MessageLookupByLibrary.simpleMessage(
+      "The current key already exists",
+    ),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
     "layout": MessageLookupByLibrary.simpleMessage("Layout"),
     "light": MessageLookupByLibrary.simpleMessage("Light"),
@@ -597,6 +600,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "useHosts": MessageLookupByLibrary.simpleMessage("Use hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("Use system hosts"),
     "value": MessageLookupByLibrary.simpleMessage("Value"),
+    "valueExists": MessageLookupByLibrary.simpleMessage(
+      "The current value already exists",
+    ),
     "view": MessageLookupByLibrary.simpleMessage("View"),
     "vpnDesc": MessageLookupByLibrary.simpleMessage(
       "Modify VPN related settings",

@@ -146,86 +146,72 @@ class _InputDialogState extends State<InputDialog> {
   }
 }
 
-class ListPage<T> extends StatelessWidget {
+class ListInputPage extends StatelessWidget {
   final String title;
-  final Iterable<T> items;
-  final Key Function(T item)? keyBuilder;
-  final Widget Function(T item) titleBuilder;
-  final Widget Function(T item)? subtitleBuilder;
-  final Widget Function(T item)? leadingBuilder;
-  final String? keyLabel;
+  final List<String> items;
+  final Widget Function(String item) titleBuilder;
+  final Widget Function(String item)? subtitleBuilder;
+  final Widget Function(String item)? leadingBuilder;
   final String? valueLabel;
-  final Function(Iterable<T> items) onChange;
+  final Function(List<String> items) onChange;
 
-  const ListPage({
+  const ListInputPage({
     super.key,
     required this.title,
     required this.items,
-    this.keyBuilder,
     required this.titleBuilder,
     required this.onChange,
     this.leadingBuilder,
-    this.keyLabel,
     this.valueLabel,
     this.subtitleBuilder,
   });
 
-  bool get isMap => items is Iterable<MapEntry>;
+  _handleAddOrEdit([String? item]) async {
+    uniqueValidator(String? value) {
+      final index = items.indexWhere(
+        (entry) {
+          return entry == value;
+        },
+      );
+      final current = item == value;
+      if (index != -1 && !current) {
+        return appLocalizations.valueExists;
+      }
+      return null;
+    }
 
-  _handleAddOrEdit([T? item]) async {
-    final value = await globalState.showCommonDialog<T>(
+    final valueField = Field(
+      label: valueLabel ?? appLocalizations.value,
+      value: item ?? "",
+      validator: uniqueValidator,
+    );
+    final value = await globalState.showCommonDialog<String>(
       child: AddDialog(
-        keyField: isMap
-            ? Field(
-                label: this.keyLabel ?? appLocalizations.key,
-                value:
-                    item == null ? "" : (item as MapEntry<String, String>).key,
-              )
-            : null,
-        valueField: Field(
-          label: this.valueLabel ?? appLocalizations.value,
-          value: item == null
-              ? ""
-              : isMap
-                  ? (item as MapEntry<String, String>).value
-                  : item as String,
-        ),
+        valueField: valueField,
         title: title,
       ),
     );
     if (value == null) return;
-    final entries = List<T>.from(
-      items,
+    final index = items.indexWhere(
+      (entry) {
+        return entry == item;
+      },
     );
+    final nextItems = List<String>.from(items);
     if (item != null) {
-      final index = entries.indexWhere(
-        (entry) {
-          if (isMap) {
-            return (entry as MapEntry<String, String>).key ==
-                (item as MapEntry<String, String>).key;
-          }
-          return entry == item;
-        },
-      );
-      if (index != -1) {
-        entries[index] = value;
-      }
+      nextItems[index] = value;
     } else {
-      entries.add(value);
+      nextItems.add(value);
     }
-    onChange(entries);
+    onChange(nextItems);
   }
 
-  _handleDelete(T item) {
-    final entries = List<T>.from(
+  _handleDelete(String? item) {
+    final entries = List<String>.from(
       items,
     );
     final index = entries.indexWhere(
       (entry) {
-        if (isMap) {
-          return (entry as MapEntry<String, String>).key ==
-              (item as MapEntry<String, String>).key;
-        }
         return entry == item;
       },
     );
@@ -233,54 +219,6 @@ class ListPage<T> extends StatelessWidget {
       entries.removeAt(index);
     }
     onChange(entries);
-  }
-
-  Widget _buildList() {
-    final items = this.items.toList();
-    return ReorderableListView.builder(
-      padding: const EdgeInsets.only(
-        bottom: 16 + 64,
-        left: 16,
-        right: 16,
-      ),
-      buildDefaultDragHandles: false,
-      itemCount: items.length,
-      itemBuilder: (_, index) {
-        final e = items[index];
-        return Padding(
-          key: ValueKey(e),
-          padding: const EdgeInsets.symmetric(vertical: 6),
-          child: ReorderableDragStartListener(
-            index: index,
-            child: CommonCard(
-              child: ListItem(
-                leading: leadingBuilder != null ? leadingBuilder!(e) : null,
-                title: titleBuilder(e),
-                subtitle: subtitleBuilder != null ? subtitleBuilder!(e) : null,
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete_outline),
-                  onPressed: () {
-                    _handleDelete(e);
-                  },
-                ),
-              ),
-              onPressed: () {
-                _handleAddOrEdit(e);
-              },
-            ),
-          ),
-        );
-      },
-      onReorder: (oldIndex, newIndex) {
-        if (oldIndex < newIndex) {
-          newIndex -= 1;
-        }
-        final nextItems = List<T>.from(items);
-        final item = nextItems.removeAt(oldIndex);
-        nextItems.insert(newIndex, item);
-        onChange(nextItems);
-      },
-    );
   }
 
   @override
@@ -296,7 +234,204 @@ class ListPage<T> extends StatelessWidget {
       ),
       child: items.isEmpty
           ? NullStatus(label: appLocalizations.noData)
-          : _buildList(),
+          : ReorderableListView.builder(
+              padding: const EdgeInsets.only(
+                bottom: 16 + 64,
+                left: 16,
+                right: 16,
+              ),
+              buildDefaultDragHandles: false,
+              itemCount: items.length,
+              itemBuilder: (_, index) {
+                final e = items[index];
+                return Padding(
+                  key: ValueKey(e),
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: ReorderableDragStartListener(
+                    index: index,
+                    child: CommonCard(
+                      child: ListItem(
+                        leading:
+                            leadingBuilder != null ? leadingBuilder!(e) : null,
+                        title: titleBuilder(e),
+                        subtitle: subtitleBuilder != null
+                            ? subtitleBuilder!(e)
+                            : null,
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete_outline),
+                          onPressed: () {
+                            _handleDelete(e);
+                          },
+                        ),
+                      ),
+                      onPressed: () {
+                        _handleAddOrEdit(e);
+                      },
+                    ),
+                  ),
+                );
+              },
+              onReorder: (oldIndex, newIndex) {
+                if (oldIndex < newIndex) {
+                  newIndex -= 1;
+                }
+                final nextItems = List<String>.from(items);
+                final item = nextItems.removeAt(oldIndex);
+                nextItems.insert(newIndex, item);
+                onChange(nextItems);
+              },
+            ),
+    );
+  }
+}
+
+class MapInputPage extends StatelessWidget {
+  final String title;
+  final Map<String, String> map;
+  final Widget Function(MapEntry<String, String> item) titleBuilder;
+  final Widget Function(MapEntry<String, String> item)? subtitleBuilder;
+  final Widget Function(MapEntry<String, String> item)? leadingBuilder;
+  final String? keyLabel;
+  final String? valueLabel;
+  final Function(Map<String, String> items) onChange;
+
+  const MapInputPage({
+    super.key,
+    required this.title,
+    required this.map,
+    required this.titleBuilder,
+    required this.onChange,
+    this.leadingBuilder,
+    this.keyLabel,
+    this.valueLabel,
+    this.subtitleBuilder,
+  });
+
+  List<MapEntry<String, String>> get items =>
+      List<MapEntry<String, String>>.from(
+        map.entries,
+      );
+
+  _handleAddOrEdit([MapEntry<String, String>? item]) async {
+    uniqueValidator(String? value) {
+      final index = items.indexWhere(
+        (entry) {
+          return entry.key == value;
+        },
+      );
+      final current = item?.key == value;
+      if (index != -1 && !current) {
+        return appLocalizations.keyExists;
+      }
+      return null;
+    }
+
+    final keyField = Field(
+      label: keyLabel ?? appLocalizations.key,
+      value: item == null ? "" : item.key,
+      validator: uniqueValidator,
+    );
+
+    final valueField = Field(
+      label: valueLabel ?? appLocalizations.value,
+      value: item == null ? "" : item.value,
+    );
+
+    final value = await globalState.showCommonDialog<MapEntry<String, String>>(
+      child: AddDialog(
+        keyField: keyField,
+        valueField: valueField,
+        title: title,
+      ),
+    );
+    if (value == null) return;
+    final index = items.indexWhere(
+      (entry) {
+        return entry.key == item?.key;
+      },
+    );
+
+    final nextItems = List<MapEntry<String, String>>.from(items);
+    if (item != null) {
+      nextItems[index] = value;
+    } else {
+      nextItems.add(value);
+    }
+    onChange(Map.fromEntries(nextItems));
+  }
+
+  _handleDelete(MapEntry<String, String> item) {
+    final index = items.indexWhere(
+      (entry) {
+        return entry.key == item.key;
+      },
+    );
+    if (index != -1) {
+      items.removeAt(index);
+    }
+    onChange(Map.fromEntries(items));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatLayout(
+      floatingWidget: FloatWrapper(
+        child: FloatingActionButton(
+          onPressed: () async {
+            _handleAddOrEdit();
+          },
+          child: const Icon(Icons.add),
+        ),
+      ),
+      child: items.isEmpty
+          ? NullStatus(label: appLocalizations.noData)
+          : ReorderableListView.builder(
+              padding: const EdgeInsets.only(
+                bottom: 16 + 64,
+                left: 16,
+                right: 16,
+              ),
+              buildDefaultDragHandles: false,
+              itemCount: items.length,
+              itemBuilder: (_, index) {
+                final e = items[index];
+                return Padding(
+                  key: ValueKey(e.key),
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: ReorderableDragStartListener(
+                    index: index,
+                    child: CommonCard(
+                      child: ListItem(
+                        leading:
+                            leadingBuilder != null ? leadingBuilder!(e) : null,
+                        title: titleBuilder(e),
+                        subtitle: subtitleBuilder != null
+                            ? subtitleBuilder!(e)
+                            : null,
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete_outline),
+                          onPressed: () {
+                            _handleDelete(e);
+                          },
+                        ),
+                      ),
+                      onPressed: () {
+                        _handleAddOrEdit(e);
+                      },
+                    ),
+                  ),
+                );
+              },
+              onReorder: (oldIndex, newIndex) {
+                if (oldIndex < newIndex) {
+                  newIndex -= 1;
+                }
+                final nextItems = List<MapEntry<String, String>>.from(items);
+                final item = nextItems.removeAt(oldIndex);
+                nextItems.insert(newIndex, item);
+                onChange(Map.fromEntries(nextItems));
+              },
+            ),
     );
   }
 }

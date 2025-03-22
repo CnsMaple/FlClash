@@ -1,8 +1,6 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
-import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/config.dart';
-import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -213,7 +211,7 @@ class FakeIpFilterItem extends StatelessWidget {
               patchClashConfigProvider
                   .select((state) => state.dns.fakeIpFilter),
             );
-            return ListPage(
+            return ListInputPage(
               title: appLocalizations.fakeipFilter,
               items: fakeIpFilter,
               titleBuilder: (item) => Text(item),
@@ -248,7 +246,7 @@ class DefaultNameserverItem extends StatelessWidget {
             patchClashConfigProvider
                 .select((state) => state.dns.defaultNameserver),
           );
-          return ListPage(
+          return ListInputPage(
             title: appLocalizations.defaultNameserver,
             items: defaultNameserver,
             titleBuilder: (item) => Text(item),
@@ -281,8 +279,8 @@ class NameserverItem extends StatelessWidget {
           final nameserver = ref.watch(
             patchClashConfigProvider.select((state) => state.dns.nameserver),
           );
-          return ListPage(
-            title: "域名服务器",
+          return ListInputPage(
+            title: appLocalizations.nameserver,
             items: nameserver,
             titleBuilder: (item) => Text(item),
             onChange: (items) {
@@ -361,15 +359,15 @@ class NameserverPolicyItem extends StatelessWidget {
             patchClashConfigProvider
                 .select((state) => state.dns.nameserverPolicy),
           );
-          return ListPage(
+          return MapInputPage(
             title: appLocalizations.nameserverPolicy,
-            items: nameserverPolicy.entries,
+            map: nameserverPolicy,
             titleBuilder: (item) => Text(item.key),
             subtitleBuilder: (item) => Text(item.value),
-            onChange: (items) {
+            onChange: (value) {
               ref.read(patchClashConfigProvider.notifier).updateState(
                     (state) => state.copyWith.dns(
-                      nameserverPolicy: Map.fromEntries(items),
+                      nameserverPolicy: value,
                     ),
                   );
             },
@@ -397,7 +395,7 @@ class ProxyServerNameserverItem extends StatelessWidget {
               patchClashConfigProvider
                   .select((state) => state.dns.proxyServerNameserver),
             );
-            return ListPage(
+            return ListInputPage(
               title: appLocalizations.proxyNameserver,
               items: proxyServerNameserver,
               titleBuilder: (item) => Text(item),
@@ -431,7 +429,7 @@ class FallbackItem extends StatelessWidget {
           final fallback = ref.watch(
             patchClashConfigProvider.select((state) => state.dns.fallback),
           );
-          return ListPage(
+          return ListInputPage(
             title: appLocalizations.fallback,
             items: fallback,
             titleBuilder: (item) => Text(item),
@@ -519,7 +517,7 @@ class GeositeItem extends StatelessWidget {
             patchClashConfigProvider
                 .select((state) => state.dns.fallbackFilter.geosite),
           );
-          return ListPage(
+          return ListInputPage(
             title: "Geosite",
             items: geosite,
             titleBuilder: (item) => Text(item),
@@ -552,7 +550,7 @@ class IpcidrItem extends StatelessWidget {
             patchClashConfigProvider
                 .select((state) => state.dns.fallbackFilter.ipcidr),
           );
-          return ListPage(
+          return ListInputPage(
             title: appLocalizations.ipcidr,
             items: ipcidr,
             titleBuilder: (item) => Text(item),
@@ -585,7 +583,7 @@ class DomainItem extends StatelessWidget {
             patchClashConfigProvider
                 .select((state) => state.dns.fallbackFilter.domain),
           );
-          return ListPage(
+          return ListInputPage(
             title: appLocalizations.domain,
             items: domain,
             titleBuilder: (item) => Text(item),
@@ -662,39 +660,8 @@ const dnsItems = <Widget>[
 class DnsListView extends ConsumerWidget {
   const DnsListView({super.key});
 
-  _initActions(BuildContext context, WidgetRef ref) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.commonScaffoldState?.actions = [
-        IconButton(
-          onPressed: () async {
-            final res = await globalState.showMessage(
-              title: appLocalizations.reset,
-              message: TextSpan(
-                text: appLocalizations.resetTip,
-              ),
-            );
-            if (res != true) {
-              return;
-            }
-
-            ref.read(patchClashConfigProvider.notifier).updateState(
-                  (state) => state.copyWith(
-                    dns: defaultDns,
-                  ),
-                );
-          },
-          tooltip: appLocalizations.reset,
-          icon: const Icon(
-            Icons.replay,
-          ),
-        )
-      ];
-    });
-  }
-
   @override
   Widget build(BuildContext context, ref) {
-    _initActions(context, ref);
     return generateListView(
       dnsItems,
     );

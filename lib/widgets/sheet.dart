@@ -70,7 +70,7 @@ Future<T?> showSheet<T>({
         constraints: BoxConstraints(
           maxWidth: props.maxWidth ?? 360,
         ),
-        filter: props.blur ? filter : null,
+        filter: props.blur ? commonFilter : null,
         builder: (_) {
           return builder(context, SheetType.sideSheet);
         },
@@ -95,7 +95,7 @@ Future<T?> showExtend<T>(
         constraints: BoxConstraints(
           maxWidth: props.maxWidth ?? 360,
         ),
-        filter: props.blur ? filter : null,
+        filter: props.blur ? commonFilter : null,
         builder: (context) {
           return builder(context, SheetType.sideSheet);
         },

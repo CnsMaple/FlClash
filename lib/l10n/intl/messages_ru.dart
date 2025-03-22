@@ -322,6 +322,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Интервал поддержания TCP-соединения",
     ),
     "key": MessageLookupByLibrary.simpleMessage("Ключ"),
+    "keyExists": MessageLookupByLibrary.simpleMessage(
+      "Текущий ключ уже существует",
+    ),
     "language": MessageLookupByLibrary.simpleMessage("Язык"),
     "layout": MessageLookupByLibrary.simpleMessage("Макет"),
     "light": MessageLookupByLibrary.simpleMessage("Светлый"),
@@ -641,6 +644,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Использовать системные hosts",
     ),
     "value": MessageLookupByLibrary.simpleMessage("Значение"),
+    "valueExists": MessageLookupByLibrary.simpleMessage(
+      "Текущее значение уже существует",
+    ),
     "view": MessageLookupByLibrary.simpleMessage("Просмотр"),
     "vpnDesc": MessageLookupByLibrary.simpleMessage(
       "Изменение настроек, связанных с VPN",

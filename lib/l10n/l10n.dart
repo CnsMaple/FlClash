@@ -2694,6 +2694,26 @@ class AppLocalizations {
   String get listen {
     return Intl.message('Listen', name: 'listen', desc: '', args: []);
   }
+
+  /// `The current key already exists`
+  String get keyExists {
+    return Intl.message(
+      'The current key already exists',
+      name: 'keyExists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The current value already exists`
+  String get valueExists {
+    return Intl.message(
+      'The current value already exists',
+      name: 'valueExists',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -143,13 +143,11 @@ class _IconConfigView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final iconMap =
         ref.watch(proxiesStyleSettingProvider.select((state) => state.iconMap));
-    final entries = iconMap.entries.toList();
-    return ListPage(
+    return MapInputPage(
       title: appLocalizations.iconConfiguration,
-      items: entries,
+      map: iconMap,
       keyLabel: appLocalizations.regExp,
       valueLabel: appLocalizations.icon,
-      keyBuilder: (item) => Key(item.key),
       titleBuilder: (item) => Text(item.key),
       leadingBuilder: (item) => Container(
         decoration: BoxDecoration(
@@ -166,10 +164,10 @@ class _IconConfigView extends ConsumerWidget {
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),
-      onChange: (entries) {
+      onChange: (value) {
         ref.read(proxiesStyleSettingProvider.notifier).updateState(
               (state) => state.copyWith(
-                iconMap: Map.fromEntries(entries),
+                iconMap: value,
               ),
             );
       },
