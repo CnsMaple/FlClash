@@ -85,7 +85,7 @@ class CommonCard extends StatelessWidget {
   const CommonCard({
     super.key,
     bool? isSelected,
-    this.type = CommonCardType.filled,
+    this.type = CommonCardType.plain,
     this.onPressed,
     this.selectWidget,
     this.radius = 12,
@@ -134,7 +134,7 @@ class CommonCard extends StatelessWidget {
     if (isSelected) {
       return colorScheme.secondaryContainer;
     }
-    return colorScheme.surfaceContainerHighest;
+    return colorScheme.surfaceContainer;
   }
 
   @override

@@ -129,11 +129,9 @@ class _AdaptiveSheetScaffoldState extends State<AdaptiveSheetScaffold> {
     final sideSheet = widget.type == SheetType.sideSheet;
     final appBar = AppBar(
       forceMaterialTransparency: bottomSheet ? true : false,
-      automaticallyImplyLeading: widget.actions.isEmpty && sideSheet
+      automaticallyImplyLeading: bottomSheet ? false : widget.actions.isEmpty && sideSheet
           ? false
-          : bottomSheet
-              ? false
-              : true,
+          : true,
       centerTitle: bottomSheet,
       backgroundColor: backgroundColor,
       // titleTextStyle: bottomSheet
@@ -145,7 +143,7 @@ class _AdaptiveSheetScaffoldState extends State<AdaptiveSheetScaffold> {
         widget.title,
       ),
       actions: genActions([
-        if (widget.actions.isEmpty) CloseButton(),
+        if (widget.actions.isEmpty && sideSheet) CloseButton(),
         ...widget.actions,
       ]),
     );
