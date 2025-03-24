@@ -68,7 +68,7 @@ Support the following actions
    git submodule update --init --recursive
    ```
 
-2. Install `Flutter` and `Golang` environment
+2. Install `Flutter` and `Golang` environment. If you are using Windows, you need to install `Rust`
 
 3. Build Application
 
@@ -88,9 +88,11 @@ Support the following actions
 
         1. You need a windows client
 
-        2. Install  `Gcc`，`Inno Setup`
+        2. Install  `Gcc`，`Inno Setup 6`
 
-        3. Run build script
+        3. Install fastforge `dart pub global activate fastforge 0.5.0`
+
+        4. Run build script
 
            ```bash
            dart .\setup.dart windows --arch <arm64 | amd64>

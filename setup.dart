@@ -424,11 +424,11 @@ class BuildCommand extends Command {
     required String targets,
     String args = '',
   }) async {
-    await Build.getDistributor();
+    // await Build.getDistributor();
     await Build.exec(
       name: name,
       Build.getExecutable(
-        "flutter_distributor package --skip-clean --platform ${target.name} --targets $targets --flutter-build-args=verbose $args",
+        "fastforge package --skip-clean --platform ${target.name} --targets $targets --flutter-build-args=verbose $args",
       ),
     );
   }
@@ -475,7 +475,8 @@ class BuildCommand extends Command {
         _buildDistributor(
           target: target,
           targets: "exe,zip",
-          args: "--description $archName",
+          // args: "--description $archName",
+          args: "",
         );
         return;
       case Target.linux:
@@ -496,7 +497,8 @@ class BuildCommand extends Command {
           target: target,
           targets: targets,
           args:
-              "--description $archName --build-target-platform $defaultTarget",
+              // "--description $archName --build-target-platform $defaultTarget",
+              "--build-target-platform $defaultTarget",
         );
         return;
       case Target.android:
@@ -522,7 +524,8 @@ class BuildCommand extends Command {
         _buildDistributor(
           target: target,
           targets: "dmg",
-          args: "--description $archName",
+          // args: "--description $archName",
+          args: "",
         );
         return;
     }

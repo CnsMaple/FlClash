@@ -68,7 +68,7 @@ on Mobile:
    git submodule update --init --recursive
    ```
 
-2. 安装 `Flutter` 以及 `Golang` 环境
+2. 安装 `Flutter` 以及 `Golang` 环境。如果你使用Windows，需要安装 `Rust`
 
 3. 构建应用
 
@@ -88,9 +88,11 @@ on Mobile:
 
         1. 你需要一个windows客户端
 
-        2. 安装 `Gcc`，`Inno Setup`
+        2. 安装 `Gcc`，`Inno Setup 6`
 
-        3. 运行构建脚本
+        3. 安装 fastforge `dart pub global activate fastforge 0.5.0`
+
+        4. 运行构建脚本
 
            ```bash
            dart .\setup.dart windows --arch <arm64 | amd64>

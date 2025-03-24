@@ -1,12 +1,17 @@
-app_id: 728B3532-C74B-4870-9068-BE70FE12A3E6
-app_name: FlClash
-publisher: chen08209
-publisher_url: https://github.com/chen08209/FlClash
+# AppId 的值唯一标识此应用。
+# 不要在其他应用的安装程序中使用相同的 AppId 值。
+app_id: 728B3532-C74B-4870-9068-BE70FE12A3E7
+publisher: CnsMaple
+publisher_url: https://github.com/CnsMaple/FlClash
 display_name: FlClash
+create_desktop_icon: true
 executable_name: FlClash.exe
 output_base_file_name: FlClash.exe
-setup_icon_file: ..\windows\runner\resources\app_icon.ico
+# See: https://jrsoftware.org/ishelp/index.php?topic=setup_defaultdirname
+# install_dir_name: "D:\\HELLO-WORLD"
+# 这里的路径是相对于项目根目录的路径； 图标格式必须是ico格式，不能是png或其它
+setup_icon_file: windows\runner\resources\app_icon.ico
+script_template: inno_setup.iss
 locales:
-  - lang: zh
-    file: ..\windows\packaging\exe\ChineseSimplified.isl
-  - lang: en
+  - zh
+  - en
